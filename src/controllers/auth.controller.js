@@ -1,6 +1,7 @@
 const authService = require('../services/auth.service');
 
 exports.login = async (req, res) => {
+  console.log('starting login autentication...');
   const { email, password } = req.body;
   const result = await authService.login(email, password);
   
@@ -8,6 +9,7 @@ exports.login = async (req, res) => {
 };
 
 exports.refresh = async (req, res) => {
+  console.log('starting refreah token login autentication...');
 
   const refreshToken = req.cookies.refreshToken;
 
@@ -35,6 +37,7 @@ exports.refresh = async (req, res) => {
  *  - Usado para gerar um novo Access Token quando ele expirar
  **/
 function setCookies (res, result) {
+  console.log('defined cookies token login autentication...');
   if (result.success) {
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
@@ -66,12 +69,14 @@ function setCookies (res, result) {
 
 
 exports.logout = (req, res) => {
+  console.log('logout login autentication...');
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
   res.send({ message: 'Logged out' });
 };
 
 exports.profile = (req, res) => {
+  console.log('get profile...');
   res.send({
     message: 'Access granted to protected route',
     email: req.user.email
