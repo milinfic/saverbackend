@@ -9,6 +9,14 @@ exports.read = async (data) => {
   return returnValues;
 };
 
+exports.readById = async (data) => {
+  console.log('read service...');
+
+  const returnValues = await expenseType.readById(data);
+  
+  return returnValues;
+};
+
 exports.create = async (data) => {
   console.log('create service...', data);
 
@@ -17,15 +25,19 @@ exports.create = async (data) => {
   return returnValues;
 };
 
-exports.update = async (data) => {
-  console.log('update service...');
+exports.update = async (id, data) => {
+  console.log('update service...');  
+
+  const returnValues = await expenseType.update(id, data);
   
-  return data;
+  return returnValues;
 };
 
-exports.delete = async (data) => {
+exports.delete = async (id) => {
   console.log('delete service...');
+
+  await expenseType.delete(id);
   
-  return data;
+  return id;
 };
 

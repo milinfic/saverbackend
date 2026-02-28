@@ -2,8 +2,15 @@ const expenseType = require('../services/expenseType.service');
 
 exports.read = async (req, res) => {
   console.log('read expensive Type...');
-  
+
   res.send(await expenseType.read(req.body));
+};
+
+exports.readById = async (req, res) => {
+  const { id } = req.params; // pega o ID da URL
+  console.log('readById expensive Type...');
+
+  res.send(await expenseType.readById(id));
 };
 
 exports.create = async (req, res) => {
@@ -15,14 +22,24 @@ exports.create = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-  console.log('update expensive Type...');  
-  
-  res.send(await expenseType.update(req.body));
+  const { id } = req.params; // pega o ID da URL
+  console.log('update expensive Type...');
+
+  res.send(await expenseType.update(id, req.body));
 };
 
 exports.delete = async (req, res) => {
-  console.log('delete expensive Type...');
+  try {
+    const { id } = req.params; // pega o ID da URL
+    console.log('Deleting expense type id:', id);
 
-  res.send(await expenseType.delete(req.body));
+    // chamar o serviço que deleta do banco
+    await expenseType.delete(id);
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: true });
+  }
 };
 

@@ -15,6 +15,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/auth', authRoutes); //Autenticação
-app.use('/expensive-type', expenseType); //Autenticação
+app.use('/expensive-type', expenseType); //Tipo de Gasto
 
 module.exports = app;
