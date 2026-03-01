@@ -51,10 +51,13 @@ exports.read = async (data) => {
 };
 
 exports.readById = async (data) => {
+  console.log(data);
   return expenses.find((type) => String(type.id) === data);
 };
 
 exports.create = async (data) => {
+  const maxId = Math.max(...expenses.map(item => item.id))
+  data['id'] = maxId + 1;
   data['date'] = new Date();
   expenses.push(data);
 
