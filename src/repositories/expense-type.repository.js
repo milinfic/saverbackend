@@ -35,12 +35,6 @@ exports.create = async (data) => {
   expensiveTypes.push(data);
 
   return expensiveTypes;
-
-  // return new Promise((resolve) => {
-  //   setTimeout(() => {
-  //     resolve(expensiveTypes);
-  //   }, 5000);
-  // });
 };
 
 exports.update = async (id, data) => {
