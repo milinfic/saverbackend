@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const revenueController = require('../controllers/revenue-type.controller');
+const revenueController = require('../controllers/revenueType.controller');
 // const authMiddleware = require('../middleware/auth.middleware');
 
 router.post('/read', revenueController.read);

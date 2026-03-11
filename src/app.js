@@ -4,9 +4,10 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth.routes');
 const dashboard = require('./routes/dashboard.routes');
 const expense = require('./routes/expense.routes');
-const expenseType = require('./routes/expense-type.routes');
+const expenseType = require('./routes/expenseType.routes');
+const expenseGroup = require('./routes/expenseGroup.routes');
 const revenue = require('./routes/revenue.routes');
-const revenueType = require('./routes/revenue-type.routes');
+const revenueType = require('./routes/revenueType.routes');
 
 const app = express();
 
@@ -21,7 +22,8 @@ app.use(cookieParser());
 app.use('/auth', authRoutes); //Autenticação
 app.use('/dashboard', dashboard); //DashBoard
 app.use('/expense', expense); //Despesas
-app.use('/expensive-type', expenseType); //Tipos de Despesas
+app.use('/expense-type', expenseType); //Tipos de Despesas
+app.use('/expense-group', expenseGroup); //Tipos de Despesas
 app.use('/revenue', revenue); //Receitas
 app.use('/revenue-type', revenueType); //Tipos de Receitas
 
