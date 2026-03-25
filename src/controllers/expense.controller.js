@@ -1,4 +1,4 @@
-const expense = require('../services/expenseGroup.service');
+const expense = require('../services/expense.service');
 
 exports.read = async (req, res) => {
   console.log('read expense...');

@@ -4,8 +4,19 @@ let revenueType = [
   { id: 3, name: 'Trabalho ou Vendas Equipamento', column: 'pessoal', date: new Date() },
 ];
 
+const DB = require('../../models/index');
+
 exports.read = async (data) => {
-  return revenueType;
+  try {
+    const table = await DB.RevenueType
+    .query(1)
+    .select('id', 'name', 'column', 'date');
+    
+    return table;
+  } catch (err) {
+    console.error('Erro ao ler revenue_type:', err);
+    return [];
+  }
 };
 
 exports.readById = async (data) => {

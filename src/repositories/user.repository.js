@@ -1,18 +1,44 @@
-const Users = [
-  { email: 'paulo@hotmail.com', password: '1234', refreshToken: null },
-  { email: 'carla@hotmail.com', password: '1234', refreshToken: null }
-];
+const DB = require('../../models/index');
 
-exports.findByEmail = (email) => {
-  return Users.find(u => u.email === email) || null;
+exports.findByEmail = async (email) => {
+  try {
+    const result = await DB.Users.query()
+    .where('email', email).first();
+    
+    // Neon retorna um array com os resultados
+    return result || null;
+
+  } catch (err) {
+    console.error('Erro ao buscar usuário:', err);
+    return null;
+  }
 };
 
-exports.updateRefreshToken = (email, refreshToken) => {
-  const user = Users.find(u => u.email === email);
-  if (user) user.refreshToken = refreshToken;
-  return user;
+exports.updateRefreshToken = async (email, refreshToken) => {
+  try {
+    const result = await DB.Users.query()
+    .update({'refresh_token': refreshToken})
+    .where('email', email);
+    
+    // Retorna o usuário atualizado
+    return result[0] || null;
+
+  } catch (err) {
+    console.error('Erro ao atualizar refresh token:', err);
+    return null;
+  }
 };
 
-exports.findByRefreshToken = (refreshToken) => {
-  return Users.find(u => u.refreshToken === refreshToken) || null;
+exports.findByRefreshToken = async (email, refreshToken) => {
+  try {
+    const user = await DB.Users.query()
+      .where({ email, refresh_token: refreshToken })
+      .first(); // retorna o objeto ou undefined
+
+    return user || null;
+
+  } catch (err) {
+    console.error('Erro ao buscar usuário pelo refresh token:', err);
+    return null;
+  }
 };

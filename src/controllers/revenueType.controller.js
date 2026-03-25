@@ -1,7 +1,7 @@
 const revenue = require('../services/revenueType.service');
 
 exports.read = async (req, res) => {
-  console.log('read revenue. type..');
+  console.log('read revenue. type..', req.user);
 
   res.send(await revenue.read(req.body));
 };

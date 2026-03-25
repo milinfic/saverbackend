@@ -11,8 +11,20 @@ let revenues = [
   { id: 10, expenseTypeId: 3, description: 'Moto Elétrica', value: 1200.00, date: new Date(2026, 0, 28) },
 ];
 
-exports.read = async (data) => {
-  return revenues;
+const DB = require('../../models/index');
+
+exports.read = async (data, relationalTable) => {
+  return await DB.Revenue.query(relationalTable)
+    .select([
+      `revenue_${relationalTable}.*`,
+      `revenue_type_${relationalTable}.name as revenue_type_name`
+    ])
+    .join(
+      `revenue_type_${relationalTable}`,
+      `revenue_type_${relationalTable}.id`,
+      '=',
+      `revenue_${relationalTable}.revenue_type_id`
+    );
 };
 
 exports.readById = async (data) => {

@@ -1,7 +1,6 @@
 const authService = require('../services/auth.service');
 
 exports.login = async (req, res) => {
-  console.log('starting login autentication...');
   const { email, password } = req.body;
   const result = await authService.login(email, password);
   
@@ -12,8 +11,9 @@ exports.refresh = async (req, res) => {
   console.log('starting refreah token login autentication...');
 
   const refreshToken = req.cookies.refreshToken;
+  const email = req.cookies.email;
 
-  const result = await authService.refresh(refreshToken);
+  const result = await authService.refresh(email, refreshToken);
 
   setCookies(res, result);
 };
@@ -37,20 +37,20 @@ exports.refresh = async (req, res) => {
  *  - Usado para gerar um novo Access Token quando ele expirar
  **/
 function setCookies (res, result) {
-  console.log('defined cookies token login autentication...');
+  console.log('defined cookies token login autentication...', result);
   if (result.success) {
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'Lax',
-      maxAge: 15000 // 900000
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 1900000
     });
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: 'Lax',
-      maxAge: 60000 // 86400000
+      secure: false,
+      sameSite: 'lax',
+      maxAge: 86400000
     });
 
     return res.send({
@@ -66,7 +66,6 @@ function setCookies (res, result) {
     message: result.message
   });
 }
-
 
 exports.logout = (req, res) => {
   console.log('logout login autentication...');

@@ -1,4 +1,4 @@
-const expenseType = require('../services/expenseType.service');
+const expenseType = require('../services/expenseGroup.service');
 
 exports.read = async (req, res) => {
   console.log('read expensive Type...');

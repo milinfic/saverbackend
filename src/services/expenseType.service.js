@@ -1,5 +1,5 @@
 
-const expenseType = require('../repositories/expense-type.repository');
+const expenseType = require('../repositories/expenseType.repository');
 
 exports.read = async (data) => {
   console.log('read service...');

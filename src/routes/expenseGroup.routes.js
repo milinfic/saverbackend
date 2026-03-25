@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const expenseGroupController = require('../controllers/expense.controller');
+const expenseGroupController = require('../controllers/expenseGroup.controller');
 // const authMiddleware = require('../middleware/auth.middleware');
 
 router.get('/read/:id', expenseGroupController.readById);
