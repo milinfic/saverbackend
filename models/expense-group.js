@@ -1,12 +1,13 @@
 const db = require('../db');
 
-class RevenueType {
+class ExpenseGroup {
   constructor() {
-    this.baseTableName = 'revenue_type';
+    this.baseTableName = 'expense_group';
     this.defaultData = [
-      { id: 1, name: 'Salário', column: 'salario', date: new Date() },
-      { id: 2, name: 'Vendas On Line', column: 'online', date: new Date() },
-      { id: 3, name: 'Trabalho ou Vendas Equipamento', column: 'pessoal', date: new Date() },
+      { id: 1, name: 'Investimentos', color: '#1f8d0b', date: new Date(2026, 1, 5) },
+      { id: 2, name: 'Fixos', color: '#adad23', date: new Date(2026, 1, 1) },
+      { id: 3, name: 'Variados', color: '#ac2bb5', date: new Date(2026, 1, 8) },
+      { id: 4, name: 'Poderiam ser Eliminados', color: '#bf1515', date: new Date(2026, 1, 3) },
     ];
   }
 
@@ -18,9 +19,9 @@ class RevenueType {
     if (!exists) {
       await db.schema.createTable(tableName, (table) => {
         table.increments('id').primary();
-        table.string('name').notNullable();
-        table.string('column').notNullable();
-        table.timestamp('date').defaultTo(db.fn.now());
+        table.string('name').notNullable().defaultTo('');
+        table.string('color').notNullable().defaultTo('#888');
+        table.timestamp('date').defaultTo(db.fn.now()).notNullable();
       });
 
       await db(tableName).insert(this.defaultData);
@@ -36,4 +37,4 @@ class RevenueType {
   }
 }
 
-module.exports = new RevenueType();
+module.exports = new ExpenseGroup();

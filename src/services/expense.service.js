@@ -1,10 +1,10 @@
 
 const expense = require('../repositories/expense.repository');
 
-exports.read = async (data) => {
+exports.read = async (data, clientId) => {
   console.log('read service...');
 
-  const returnValues = await expense.read(data);
+  const returnValues = await expense.read(data, clientId);
   
   return returnValues;
 };

@@ -46,7 +46,22 @@ let expenses = [
   { id: 42, expenseTypeId: 20, description: 'Assinatura Canva Pro', value: 34.90, date: new Date(2026, 1, 4) },
 ];
 
-exports.read = async (data) => {
+const DB = require('../../models/index');
+
+exports.read = async (data, clientId) => {
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+  const expenses = await DB.Expense.query(safeClientId)
+    .select([
+      `expense_${safeClientId}.*`,
+      `expense_type_${safeClientId}.name as type`
+    ])
+    .join(
+      `expense_type_${safeClientId}`,
+      `expense_type_${safeClientId}.id`,
+      '=',
+      `expense_${safeClientId}.expense_type_id`
+    );
   return expenses;
 };
 

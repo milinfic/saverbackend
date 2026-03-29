@@ -5,8 +5,12 @@ let expenses = [
   { id: 4, name: 'Poderiam ser Eliminados', color: '#bf1515', date: new Date(2026, 1, 3) },
 ];
 
-exports.read = async (data) => {
-  return expenses;
+const DB = require('../../models/index');
+
+exports.read = async (data, clientId) => {
+  const expenseGroups = await DB.ExpenseGroup.query(clientId);
+  
+  return expenseGroups;
 };
 
 exports.readById = async (data) => {

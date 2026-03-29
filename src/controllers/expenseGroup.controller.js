@@ -1,9 +1,11 @@
 const expenseType = require('../services/expenseGroup.service');
 
 exports.read = async (req, res) => {
-  console.log('read expensive Type...');
+  console.log('read expense group ...', req.user.clientId);
 
-  res.send(await expenseType.read(req.body));
+  if (!req.user.clientId) res.send.json({success: false});  
+
+  res.send(await expenseType.read(req.body, req.user.clientId));
 };
 
 exports.readById = async (req, res) => {

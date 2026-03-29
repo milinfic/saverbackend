@@ -3,7 +3,13 @@ const expense = require('../services/expense.service');
 exports.read = async (req, res) => {
   console.log('read expense...');
 
-  res.send(await expense.read(req.body));
+  const clientId = req?.user?.clientId || null;
+  
+  if (!req.user.clientId) res.send.json({success: false});
+
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+  res.send(await expense.read(req.body, safeClientId));
 };
 
 exports.readById = async (req, res) => {

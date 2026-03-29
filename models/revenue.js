@@ -18,7 +18,8 @@ class Revenue {
   }
 
   async ensureTable(clientId) {
-    const tableName = `${this.baseTableName}_${clientId}`;
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+    const tableName = `${this.baseTableName}_${safeClientId}`;
     const exists = await db.schema.hasTable(tableName);
 
     if (!exists) {
@@ -31,7 +32,7 @@ class Revenue {
 
         table.foreign('revenue_type_id')
         .references('id')
-        .inTable(`revenue_type_${clientId}`)
+        .inTable(`revenue_type_${safeClientId}`)
         .onDelete('SET NULL') //CASCADE → apaga junto | RESTRICT → bloqueia exclusão | SET NULL → seta FK como null (se permitido)
         .onUpdate('CASCADE');
       })
@@ -44,7 +45,8 @@ class Revenue {
 
   // async para retornar QueryBuilder corretamente
   query(clientId) {
-    return db(`${this.baseTableName}_${clientId}`);
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+    return db(`${this.baseTableName}_${safeClientId}`);
   }
 }
 

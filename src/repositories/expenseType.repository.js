@@ -22,8 +22,24 @@ let expensiveTypes = [
   { id: 21, name: 'Educação', group: '3', date: new Date() },
 ];
 
-exports.read = async (data) => {
-  return expensiveTypes;
+const DB = require('../../models/index');
+
+exports.read = async (data, clientId) => {
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');;
+
+  const expenseTypes = await DB.ExpenseType.query(safeClientId)
+    .select([
+      `expense_type_${safeClientId}.*`,
+      `expense_group_${safeClientId}.name as group`
+    ])
+    .join(
+      `expense_group_${safeClientId}`,
+      `expense_group_${safeClientId}.id`,
+      '=',
+      `expense_type_${safeClientId}.expense_group_id`
+    );
+
+  return expenseTypes;
 };
 
 exports.readById = async (data) => {
