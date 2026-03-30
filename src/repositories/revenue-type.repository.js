@@ -6,43 +6,79 @@ let revenueType = [
 
 const DB = require('../../models/index');
 
-exports.read = async (data) => {
+exports.read = async (data, clientId) => {
   try {
-    const table = await DB.RevenueType
-    .query(1)
-    .select('id', 'name', 'column', 'date');
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+    const type = await DB.RevenueType.query(safeClientId)
+      .select('id', 'name', 'column', 'date');
     
-    return table;
+    return type;
   } catch (err) {
     console.error('Erro ao ler revenue_type:', err);
     return [];
   }
 };
 
-exports.readById = async (data) => {
-  return revenueType.find((type) => String(type.id) === data);
+exports.readById = async (id, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+  
+    const type = await DB.RevenueType.query(safeClientId)
+      .select('id', 'name', 'column', 'date')
+      .where({id: id}).first();
+  
+    return type;
+    
+  } catch (error) {
+    console.log('error readById revenye-type-repository: ', error.message);
+    return null;
+  }
 };
 
-exports.create = async (data) => {
-  data['date'] = new Date();
-  revenueType.push(data);
+exports.create = async (data, clientId) => {
+  try {
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
-  return revenueType;
+  const created = await DB.RevenueType.query(safeClientId)
+    .insert(data);
+
+  return created;
+
+  } catch (error) {
+    console.log('error create revenye-type-repository: ', error.message);
+    return null;
+  }
 };
 
-exports.update = async (id, data) => {
-  console.log('update service...');
+exports.update = async (id, data, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
-  data['id'] = id;
-  data['date'] = new Date();
-
-  const index = revenueType.findIndex(item => String(item.id) === String(id));
-  if (index !== -1) revenueType[index] = data;
-
-  return data;
+    return await DB.RevenueType.query(safeClientId)
+      .update(data)
+      .where('id', id);
+    
+  } catch (error) {
+    console.log('error update revenye-type-repository: ', error.message);
+    return false;
+  }
 };
 
-exports.delete = async (id) => {
+exports.delete = async (id, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+    const deleted = await DB.RevenueType.query(safeClientId)
+      .delete()
+      .where('id', id);
+
+    return deleted;
+    
+  } catch (error) {
+    console.log('error delete revenye-type-repository: ', error.message);
+    return false;
+  }
   console.log('delete service...', id);
 
   revenueType = revenueType.filter((s) => String(s.id) !== String(id));
