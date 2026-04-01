@@ -1,42 +1,53 @@
 const revenue = require('../services/revenue.service');
+const utils = require('../utils/comumnsFunctions');
 
 exports.read = async (req, res) => {
-  console.log('read revenue. type..', req.user.clientId);
 
-  if (!req.user.clientId) res.send.json({success: false});
+  const clientId = utils.getClientID(req, res);
 
-  res.send(await revenue.read(req.body, req.user.clientId));
+  const data = await revenue.read(req.body, clientId);
+
+  res.send(data);
 };
 
 exports.readById = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
-  console.log('readById revenue...');
 
-  res.send(await revenue.readById(id));
+  const clientId = utils.getClientID(req, res);
+
+  const data = await revenue.readById(id, clientId);
+
+  res.send(data);
 };
 
 exports.create = async (req, res) => {
-  console.log('create revenue...');
+  const clientId = utils.getClientID(req);
 
-  res.send({
-    data: await revenue.create(req.body)
-  });
+  if (!clientId) return res.send.json({success: false});
+
+  const data = await revenue.create(req.body, clientId);
+
+  res.send(data);
 };
 
 exports.update = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
-  console.log('update revenue...');
 
-  res.send(await revenue.update(id, req.body));
+  const clientId = utils.getClientID(req, res);
+
+  const data = await revenue.update(id, clientId, req.body);  
+
+  res.send(data);
 };
 
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params; // pega o ID da URL
-    console.log('Deleting revenue id:', id);
+    
+    const clientId = utils.getClientID(req, res);
 
     // chamar o serviço que deleta do banco
-    await revenue.delete(id);
+    await revenue.delete(id, clientId);
 
     res.status(200).json({ success: true });
   } catch (error) {

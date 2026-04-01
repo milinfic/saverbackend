@@ -1,7 +1,6 @@
 const revenue = require('../services/revenueType.service');
 
 exports.read = async (req, res) => {
-  console.log('read revenue. type..', req.user);
 
   const clientId = req?.user?.clientId || null;
 
@@ -9,11 +8,12 @@ exports.read = async (req, res) => {
 
   const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
-  return res.send(await revenue.read(req.body, safeClientId));
+  const revenueType = await revenue.read(req.body, safeClientId)
+
+  return res.send(revenueType);
 };
 
 exports.readById = async (req, res) => {
-  console.log('start readById revenueTypecontroller');
   const { id } = req.params; // pega o ID da URL
 
   const clientId = req?.user?.clientId || null;
@@ -28,7 +28,6 @@ exports.readById = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  console.log('create revenue...');
 
   const clientId = req?.user?.clientId || null;
 

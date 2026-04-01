@@ -14,49 +14,84 @@ let revenues = [
 const DB = require('../../models/index');
 
 exports.read = async (data, relationalTable) => {
-  return await DB.Revenue.query(relationalTable)
-    .select([
-      `revenue_${relationalTable}.*`,
-      `revenue_type_${relationalTable}.name as revenue_type_name`
-    ])
-    .join(
-      `revenue_type_${relationalTable}`,
-      `revenue_type_${relationalTable}.id`,
-      '=',
-      `revenue_${relationalTable}.revenue_type_id`
-    );
+  try {
+    return await DB.Revenue.query(relationalTable)
+      .select([
+        `revenue_${relationalTable}.*`,
+        `revenue_type_${relationalTable}.name as revenue_type_name`
+      ])
+      .join(
+        `revenue_type_${relationalTable}`,
+        `revenue_type_${relationalTable}.id`,
+        '=',
+        `revenue_${relationalTable}.revenue_type_id`
+      );
+
+  } catch (error) {
+    console.log('error read revenue.repository: ', error.message);
+    return false;
+  }
 };
 
-exports.readById = async (data) => {
-  console.log(data);
-  return revenues.find((type) => String(type.id) === data);
+exports.readById = async (id, relationalTable) => {
+  try {
+    return await DB.Revenue.query(relationalTable)
+      .select([
+        `revenue_${relationalTable}.*`,
+        `revenue_type_${relationalTable}.name as revenue_type_name`
+      ])
+      .join(
+        `revenue_type_${relationalTable}`,
+        `revenue_type_${relationalTable}.id`,
+        '=',
+        `revenue_${relationalTable}.revenue_type_id`
+      )
+      .where(`revenue_${relationalTable}.id`, id)
+      .first();
+
+  } catch (error) {
+    console.log('error readById revenue.repository: ', error.message);
+    return false;
+  }
 };
 
-exports.create = async (data) => {
-  const maxId = Math.max(...revenues.map(item => item.id))
-  data['id'] = maxId + 1;
-  data['date'] = new Date();
-  revenues.push(data);
+exports.create = async (data, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
-  return revenues;
+    return await DB.Revenue.query(safeClientId)
+      .insert(data)
+
+  } catch (error) {
+    console.log('error create revenue.repository: ', error.message);
+    return false;
+  }
 };
 
-exports.update = async (id, data) => {
-  console.log('update service...');
+exports.update = async (id, clientId, data) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
-  data['id'] = id;
-  data['date'] = new Date();
+    return await DB.Revenue.query(safeClientId)
+      .update(data)
+      .where('id', id);
 
-  const index = revenues.findIndex(item => String(item.id) === String(id));
-  if (index !== -1) revenues[index] = data;
-
-  return data;
+  } catch (error) {
+    console.log('error update revenue.repository: ', error.message);
+    return false;
+  }
 };
 
-exports.delete = async (id) => {
-  console.log('delete service...', id);
+exports.delete = async (id, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
-  revenues = revenues.filter((s) => String(s.id) !== String(id));
+    return await DB.Revenue.query(safeClientId)
+      .delete()
+      .where('id', id);
 
-  return id;
+  } catch (error) {
+    console.log('error delete revenue.repository: ', error.message);
+    return false;
+  }
 };

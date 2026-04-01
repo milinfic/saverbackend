@@ -2,7 +2,6 @@
 const revenue = require('../repositories/revenue-type.repository');
 
 exports.read = async (data, clientId) => {
-  console.log('read service revenue type...');
 
   const returnValues = await revenue.read(data, clientId);
   
@@ -10,7 +9,6 @@ exports.read = async (data, clientId) => {
 };
 
 exports.readById = async (data, clientId) => {
-  console.log('read service...');
 
   const returnValues = await revenue.readById(data, clientId);
   
@@ -41,7 +39,6 @@ exports.update = async (id, data, clientId) => {
 };
 
 exports.delete = async (id, clientId) => {
-  console.log('delete service...');
 
   await revenue.delete(id, clientId);
   
