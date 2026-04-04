@@ -9,7 +9,7 @@ exports.read = async (req, res) => {
 
   try {
     const result = await expenseType.read(req.body, safeClientId);
-    res.json(result);
+    res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error reading expense types:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -29,7 +29,7 @@ exports.readById = async (req, res) => {
     if (!result) {
       return res.status(404).json({ success: false, message: 'Expense type not found' });
     }
-    res.json(result);
+    res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error reading expense type:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -100,7 +100,7 @@ exports.delete = async (req, res) => {
 
     await expenseType.delete(id, safeClientId);
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, message: 'Expense type deleted successfully' });
   } catch (error) {
     console.error('Error deleting expense type:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });

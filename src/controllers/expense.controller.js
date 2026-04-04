@@ -9,7 +9,7 @@ exports.read = async (req, res) => {
 
   try {
     const result = await expense.read(req.body, safeClientId);
-    res.json(result);
+    res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error reading expenses:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -30,7 +30,7 @@ exports.readById = async (req, res) => {
     if (!result) {
       return res.status(404).json({ success: false, message: 'Expense not found' });
     }
-    res.json(result);
+    res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error reading expense:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -100,7 +100,7 @@ exports.delete = async (req, res) => {
     // chamar o serviço que deleta do banco
     await expense.delete(id, safeClientId);
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, message: 'Expense deleted successfully' });
   } catch (error) {
     console.error('Error deleting expense:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });

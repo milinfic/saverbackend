@@ -10,7 +10,8 @@ exports.read = async (req, res) => {
 
   try {
     const result = await revenue.read(req.body, safeClientId);
-    res.json(result);
+    
+    res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error reading revenues:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -30,7 +31,7 @@ exports.readById = async (req, res) => {
     if (!result) {
       return res.status(404).json({ success: false, message: 'Revenue not found' });
     }
-    res.json(result);
+    res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error reading revenue:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -98,7 +99,7 @@ exports.delete = async (req, res) => {
     // chamar o serviço que deleta do banco
     await revenue.delete(id, safeClientId);
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, message: 'Revenue deleted successfully' });
   } catch (error) {
     console.error('Error deleting revenue:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });

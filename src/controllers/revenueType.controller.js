@@ -10,7 +10,7 @@ exports.read = async (req, res) => {
 
   try {
     const revenueType = await revenue.read(req.body, safeClientId);
-    res.json(revenueType);
+    res.json({ success: true, data: revenueType });
   } catch (error) {
     console.error('Error reading revenue types:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -31,7 +31,7 @@ exports.readById = async (req, res) => {
     if (!revenueType) {
       return res.status(404).json({ success: false, message: 'Revenue type not found' });
     }
-    res.json(revenueType);
+    res.json({ success: true, data: revenueType });
   } catch (error) {
     console.error('Error reading revenue type:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -90,7 +90,7 @@ exports.delete = async (req, res) => {
     // chamar o serviço que deleta do banco
     await revenue.delete(id, safeClientId);
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, message: 'Revenue type deleted successfully' });
   } catch (error) {
     console.error('Error deleting revenue type:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });

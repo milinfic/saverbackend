@@ -74,14 +74,15 @@ exports.logout = (req, res) => {
   console.log('logout login autentication...');
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
-  res.send({ message: 'Logged out' });
+  res.json({ success: true, message: 'Logged out successfully' });
 };
 
 exports.profile = (req, res) => {
   console.log('get profile...');
-  res.send({
+  res.json({
+    success: true,
     message: 'Access granted to protected route',
-    email: req.user.email
+    data: { email: req.user.email }
   });
 };
 

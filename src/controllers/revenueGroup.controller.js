@@ -9,7 +9,7 @@ exports.read = async (req, res) => {
 
   try {
     const result = await revenueGroup.read(req.body, safeClientId);
-    res.json(result);
+    res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error reading revenue groups:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -29,7 +29,7 @@ exports.readById = async (req, res) => {
     if (!result) {
       return res.status(404).json({ success: false, message: 'Revenue group not found' });
     }
-    res.json(result);
+    res.json({ success: true, data: result });
   } catch (error) {
     console.error('Error reading revenue group:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -99,7 +99,7 @@ exports.delete = async (req, res) => {
 
     await revenueGroup.delete(id, safeClientId);
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, message: 'Revenue group deleted successfully' });
   } catch (error) {
     console.error('Error deleting revenue group:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
