@@ -39,46 +39,18 @@ exports.refresh = async (req, res) => {
 function setCookies (res, result) {
   console.log('defined cookies token login autentication...', result);
   if (result.success) {
-<<<<<<< HEAD
-    const isProduction = process.env.NODE_ENV === 'production';
     
-    res.cookie('accessToken', result.accessToken, {
-      httpOnly: true,
-      secure: isProduction, // HTTPS only in production
-      sameSite: isProduction ? 'strict' : 'lax',
-      maxAge: 15 * 60 * 1000 // 15 minutes
-=======
+    const isProduction = process.env.NODE_ENV === 'production';
+
     res.cookie('accessToken', result.accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: 'lax',
       maxAge: 1900000
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
     });
 
     res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
-<<<<<<< HEAD
-      secure: isProduction,
-      sameSite: isProduction ? 'strict' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
-
-    res.cookie('email', result.email || '', {
-      httpOnly: false, // Allow client-side access for refresh
-      secure: isProduction,
-      sameSite: isProduction ? 'strict' : 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
-
-    return res.json({
-      success: true,
-      message: 'Login successful'
-    });
-  }
-
-  res.status(401).json({
-=======
       secure: false,
       sameSite: 'lax',
       maxAge: 86400000
@@ -93,7 +65,6 @@ function setCookies (res, result) {
   }
 
   res.status(401).send({
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
     success: false,
     message: result.message
   });

@@ -62,21 +62,8 @@ exports.update = async (id, data, clientId) => {
 };
 
 async function setDataFormatted(data, clientId) {
-<<<<<<< HEAD
   return {
     name: data.name
-=======
-  const group = await expenseGroupRepository.readById(
-    data?.expense_group_id, clientId
-  );
-
-  if (!group) throw new Error('Grupo de despesas não encontrado, verifique o grupo enviado.');
-  if (group.error) throw new Error('Houve um erro ao busca grupo de gasto.')
-
-  return {
-    name: data.name,
-    expense_group_id: group.id
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
   }
 }
 

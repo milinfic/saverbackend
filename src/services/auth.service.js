@@ -40,11 +40,8 @@ exports.refresh = async (email, refreshToken) => {
   const decoded = this.verifyRefreshToken(refreshToken);
   if (!decoded) return { success: false, message: 'Invalid refresh token' };
 
-<<<<<<< HEAD
-  const user = await userRepository.findByRefreshToken(email, refreshToken);
-=======
   const user = userRepository.findByRefreshToken(email, refreshToken);
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
+
   if (!user) return { success: false, message: 'Refresh token not found' };
 
   const newAccessToken = this.generateAccessToken({
@@ -55,11 +52,7 @@ exports.refresh = async (email, refreshToken) => {
   const newRefreshToken = this.generateRefreshToken({ email: user.email });
 
   // invalida o refresh antigo
-<<<<<<< HEAD
   await userRepository.updateRefreshToken(user.email, newRefreshToken);
-=======
-  userRepository.updateRefreshToken(user.email, newRefreshToken);
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 
   return {
     success: true,
@@ -83,7 +76,7 @@ exports.login = async (email, password) => {
       throw new Error('Invalid credentials');
     }
   
-    // ✅ Comparar senha com hash do banco
+    // Comparar senha com hash do banco
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
       console.log('Invalid credentials')
@@ -102,13 +95,7 @@ exports.login = async (email, password) => {
   
     return { 
       success: true,
-<<<<<<< HEAD
-      accessToken, 
-      refreshToken,
-      email: user.email
-=======
       accessToken, refreshToken
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
     };
   } catch (error) {
     console.log('auth.server error login, ', error);

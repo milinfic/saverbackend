@@ -5,20 +5,7 @@ exports.read = async (data, clientId) => {
     const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
     const expenseTypes = await DB.ExpenseType.query(safeClientId)
-<<<<<<< HEAD
       .select('*')
-=======
-      .select([
-        `expense_type_${safeClientId}.*`,
-        `expense_group_${safeClientId}.name as group`
-      ])
-      .join(
-        `expense_group_${safeClientId}`,
-        `expense_group_${safeClientId}.id`,
-        '=',
-        `expense_type_${safeClientId}.expense_group_id`
-      )
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
       .orderBy(`expense_type_${safeClientId}.name`);
   
     return expenseTypes;
@@ -37,20 +24,7 @@ exports.readById = async (id, clientId) => {
     const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
     const expenseTypes = await DB.ExpenseType.query(safeClientId)
-<<<<<<< HEAD
       .select('*')
-=======
-      .select([
-        `expense_type_${safeClientId}.*`,
-        `expense_group_${safeClientId}.name as group`
-      ])
-      .join(
-        `expense_group_${safeClientId}`,
-        `expense_group_${safeClientId}.id`,
-        '=',
-        `expense_type_${safeClientId}.expense_group_id`
-      )
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
       .where(`expense_type_${safeClientId}.id`, id)
       .first();
   

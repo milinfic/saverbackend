@@ -9,10 +9,7 @@ const expenseType = require('./routes/expenseType.routes');
 const expenseGroup = require('./routes/expenseGroup.routes');
 const revenue = require('./routes/revenue.routes');
 const revenueType = require('./routes/revenueType.routes');
-<<<<<<< HEAD
 const revenueGroup = require('./routes/revenueGroup.routes');
-=======
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 const authMiddleware = require('./middleware/auth.middleware');
 
 const app = express();
@@ -39,9 +36,6 @@ app.use('/expense-type', expenseType);
 app.use('/expense-group', expenseGroup);
 app.use('/revenue', revenue);
 app.use('/revenue-type', revenueType);
-<<<<<<< HEAD
 app.use('/revenue-group', revenueGroup);
-=======
->>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 
 module.exports = app;
