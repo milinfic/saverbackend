@@ -1,74 +1,112 @@
-let expensiveTypes = [
-  { id: 1, name: 'Fixos', group: '1', date: new Date() },
-  { id: 2, name: 'Aluguel', group: '1', date: new Date() },
-  { id: 3, name: 'Condomínio', group: '1', date: new Date() },
-  { id: 4, name: 'Empréstimos', group: '1', date: new Date() },
-  { id: 5, name: 'Internet', group: '1', date: new Date() },
-  { id: 6, name: 'Telefone', group: '1', date: new Date() },
-  { id: 7, name: 'Água e Luz', group: '1', date: new Date() },
-  { id: 8, name: 'Assinaturas', group: '1', date: new Date() },
-  { id: 9, name: 'Aleatórios', group: '2', date: new Date() },
-  { id: 10, name: 'Supermercado', group: '2', date: new Date() },
-  { id: 11, name: 'Lazer', group: '2', date: new Date() },
-  { id: 12, name: 'Saúde', group: '2', date: new Date() },
-  { id: 13, name: 'Transporte', group: '2', date: new Date() },
-  { id: 14, name: 'Compras', group: '2', date: new Date() },
-  { id: 15, name: 'Presentes', group: '2', date: new Date() },
-  { id: 16, name: 'Investimentos', group: '3', date: new Date() },
-  { id: 17, name: 'Poupança', group: '3', date: new Date() },
-  { id: 18, name: 'Emergências', group: '1', date: new Date() },
-  { id: 19, name: 'Roupas', group: '1', date: new Date() },
-  { id: 20, name: 'Assinaturas Digitais', group: '3', date: new Date() },
-  { id: 21, name: 'Educação', group: '3', date: new Date() },
-];
-
 const DB = require('../../models/index');
 
 exports.read = async (data, clientId) => {
-  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');;
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
-  const expenseTypes = await DB.ExpenseType.query(safeClientId)
-    .select([
-      `expense_type_${safeClientId}.*`,
-      `expense_group_${safeClientId}.name as group`
-    ])
-    .join(
-      `expense_group_${safeClientId}`,
-      `expense_group_${safeClientId}.id`,
-      '=',
-      `expense_type_${safeClientId}.expense_group_id`
-    );
+    const expenseTypes = await DB.ExpenseType.query(safeClientId)
+      .select([
+        `expense_type_${safeClientId}.*`,
+        `expense_group_${safeClientId}.name as group`
+      ])
+      .join(
+        `expense_group_${safeClientId}`,
+        `expense_group_${safeClientId}.id`,
+        '=',
+        `expense_type_${safeClientId}.expense_group_id`
+      )
+      .orderBy(`expense_type_${safeClientId}.name`);
+  
+    return expenseTypes;
+    
+  } catch (error) {
+    console.log(error.message);
+    return {
+      error: true
+    }
+  }
 
-  return expenseTypes;
 };
 
-exports.readById = async (data) => {
-  return expensiveTypes.find((type) => String(type.id) === data);
+exports.readById = async (id, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+    const expenseTypes = await DB.ExpenseType.query(safeClientId)
+      .select([
+        `expense_type_${safeClientId}.*`,
+        `expense_group_${safeClientId}.name as group`
+      ])
+      .join(
+        `expense_group_${safeClientId}`,
+        `expense_group_${safeClientId}.id`,
+        '=',
+        `expense_type_${safeClientId}.expense_group_id`
+      )
+      .where(`expense_type_${safeClientId}.id`, id)
+      .first();
+  
+    return expenseTypes;
+
+  } catch (error) {
+    console.log(error.message);
+    return {
+      error: true
+    }
+  }
+
 };
 
-exports.create = async (data) => {
-  data['date'] = new Date();
-  expensiveTypes.push(data);
-
-  return expensiveTypes;
+exports.create = async (data, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+  
+    data['date'] = new Date();
+    
+    const created = await DB.ExpenseType.query(safeClientId)
+      .insert(data);
+  
+    return created;
+    
+  } catch (error) {
+    console.log(error.message);
+    return {
+      error: true
+    }
+  }
 };
 
-exports.update = async (id, data) => {
-  console.log('update service...');
+exports.update = async (id, data, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
 
-  data['id'] = id;
-  data['date'] = new Date();
-
-  const index = expensiveTypes.findIndex(item => String(item.id) === String(id));
-  if (index !== -1) expensiveTypes[index] = data;
-
-  return data;
+    const updated = await DB.ExpenseType.query(safeClientId)
+      .update(data)
+      .where(`expense_type_${safeClientId}.id`, id);
+  
+    return updated;
+    
+  } catch (error) {
+    console.log(error.message);
+    return {
+      error: true
+    }
+  }
 };
 
-exports.delete = async (id) => {
-  console.log('delete service...', id);
+exports.delete = async (id, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+  
+    const deleted = await DB.ExpenseType.query(safeClientId)
+      .delete()
+      .where(`expense_type_${safeClientId}.id`, id);
 
-  expensiveTypes = expensiveTypes.filter((s) => String(s.id) !== String(id));
-
-  return id;
+    return deleted ;
+  } catch (error) {
+    console.log(error.message);
+    return {
+      error: true
+    }
+  }
 };

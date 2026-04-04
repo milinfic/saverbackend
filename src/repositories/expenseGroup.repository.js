@@ -8,14 +8,34 @@ let expenses = [
 const DB = require('../../models/index');
 
 exports.read = async (data, clientId) => {
-  const expenseGroups = await DB.ExpenseGroup.query(clientId);
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
   
-  return expenseGroups;
+    const expenseGroups = await DB.ExpenseGroup.query(safeClientId)
+      .orderBy(`expense_group_${safeClientId}.name`);
+    
+    return expenseGroups;
+    
+  } catch (error) {
+    console.log(error.message);
+    return {error:true};
+  }
 };
 
-exports.readById = async (data) => {
-  console.log(data);
-  return expenses.find((type) => String(type.id) === data);
+exports.readById = async (id, clientId) => {
+  try {
+    const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+    
+    const expenseGroups = await DB.ExpenseGroup.query(safeClientId)
+      .where('id', id)
+      .first();
+  
+    return expenseGroups;
+    
+  } catch (error) {
+    console.log(error.message);
+    return {error:true};
+  }
 };
 
 exports.create = async (data) => {

@@ -1,25 +1,35 @@
-const expenseType = require('../services/expenseGroup.service');
+const expenseGroupService = require('../services/expenseGroup.service');
 
 exports.read = async (req, res) => {
-  console.log('read expense group ...', req.user.clientId);
+  const clientId = req?.user?.clientId || null;
+  
+  if (!req.user.clientId) res.send.json({success: false});
 
-  if (!req.user.clientId) res.send.json({success: false});  
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+  
+  const expenses = await expenseGroupService.read(req.body, safeClientId);
 
-  res.send(await expenseType.read(req.body, req.user.clientId));
+  res.send(expenses);
 };
 
 exports.readById = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
-  console.log('readById expensive Type...');
+  const clientId = req?.user?.clientId || null;
+  
+  if (!req.user.clientId) res.send.json({success: false});
 
-  res.send(await expenseType.readById(id));
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+  
+  const expense = await expenseGroupService.readById(id, safeClientId)
+
+  res.send(expense);
 };
 
 exports.create = async (req, res) => {
   console.log('create expensive Type...');
 
   res.send({
-    data: await expenseType.create(req.body)
+    data: await expenseGroupService.create(req.body)
   });
 };
 
@@ -27,7 +37,7 @@ exports.update = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
   console.log('update expensive Type...');
 
-  res.send(await expenseType.update(id, req.body));
+  res.send(await expenseGroupService.update(id, req.body));
 };
 
 exports.delete = async (req, res) => {
@@ -36,7 +46,7 @@ exports.delete = async (req, res) => {
     console.log('Deleting expense type id:', id);
 
     // chamar o serviço que deleta do banco
-    await expenseType.delete(id);
+    await expenseGroupService.delete(id);
 
     res.status(200).json({ success: true });
   } catch (error) {

@@ -2,25 +2,22 @@
 const expense = require('../repositories/expenseGroup.repository');
 
 exports.read = async (data, clientId) => {
-  console.log('read service...');
-
   const returnValues = await expense.read(data, clientId);
   
   return returnValues;
 };
 
-exports.readById = async (data) => {
-  console.log('read service...');
+exports.readById = async (data, clientId) => {
 
-  const returnValues = await expense.readById(data);
+  const returnValues = await expense.readById(data, clientId);
   
   return returnValues;
 };
 
-exports.create = async (data) => {
+exports.create = async (data, clientId) => {
   console.log('create service...', data);
 
-  const returnValues = await expense.create(data);
+  const returnValues = await expense.create(data, clientId);
   
   return returnValues;
 };
