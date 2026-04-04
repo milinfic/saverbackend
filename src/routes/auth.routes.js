@@ -1,0 +1,14 @@
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/auth.controller');
+const authMiddleware = require('../middleware/auth.middleware');
+
+// PUBLICO
+router.post('/login', authController.login);
+router.post('/refresh', authController.refresh);
+
+// PROTEGIDO
+router.post('/logout', authMiddleware.verifyToken, authController.logout);
+router.get('/profile', authMiddleware.verifyToken, authController.profile);
+
+module.exports = router;

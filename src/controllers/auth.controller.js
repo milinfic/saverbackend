@@ -1,0 +1,91 @@
+const authService = require('../services/auth.service');
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+  const result = await authService.login(email, password);
+  
+  setCookies(res, result);
+};
+
+exports.refresh = async (req, res) => {
+  console.log('starting refreah token login autentication...');
+
+  const refreshToken = req.cookies.refreshToken;
+  const email = req.cookies.email;
+
+  const result = await authService.refresh(email, refreshToken);
+
+  setCookies(res, result);
+};
+
+
+/**
+ * Define os cookies de autenticação no navegador do usuário.
+ * 
+ * Essa função é responsável por salvar o Access Token e o Refresh Token
+ * como cookies HTTP-only, garantindo que:
+ *  - O JavaScript do navegador não consiga acessar os tokens (proteção contra XSS)
+ *  - Os tokens sejam enviados automaticamente nas próximas requisições
+ *  - O tempo de expiração de cada token seja controlado pelo servidor
+ * 
+ * Access Token:
+ *  - Token de curta duração (ex: 15 segundos / 15 minutos)
+ *  - Usado para acessar rotas protegidas da API
+ * 
+ * Refresh Token:
+ *  - Token de longa duração (ex: 15 segundos / 1 dia )
+ *  - Usado para gerar um novo Access Token quando ele expirar
+ **/
+function setCookies (res, result) {
+  console.log('defined cookies token login autentication...', result);
+  if (result.success) {
+    const isProduction = process.env.NODE_ENV === 'production';
+    
+    res.cookie('accessToken', result.accessToken, {
+      httpOnly: true,
+      secure: isProduction, // HTTPS only in production
+      sameSite: isProduction ? 'strict' : 'lax',
+      maxAge: 15 * 60 * 1000 // 15 minutes
+    });
+
+    res.cookie('refreshToken', result.refreshToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'strict' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+    res.cookie('email', result.email || '', {
+      httpOnly: false, // Allow client-side access for refresh
+      secure: isProduction,
+      sameSite: isProduction ? 'strict' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.json({
+      success: true,
+      message: 'Login successful'
+    });
+  }
+
+  res.status(401).json({
+    success: false,
+    message: result.message
+  });
+}
+
+exports.logout = (req, res) => {
+  console.log('logout login autentication...');
+  res.clearCookie('accessToken');
+  res.clearCookie('refreshToken');
+  res.send({ message: 'Logged out' });
+};
+
+exports.profile = (req, res) => {
+  console.log('get profile...');
+  res.send({
+    message: 'Access granted to protected route',
+    email: req.user.email
+  });
+};
+
