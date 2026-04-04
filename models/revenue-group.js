@@ -2,7 +2,11 @@ const db = require('../db');
 
 class RevenueGroup {
   constructor() {
+<<<<<<< HEAD
     this.baseTableName = 'revenue_group';
+=======
+    this.baseTableName = 'expense_group';
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
     this.defaultData = [
       { id: 1, name: 'Salário', color: '#1f8d0b', date: new Date(2026, 1, 5) },
       { id: 2, name: 'Investimentos', color: '#adad23', date: new Date(2026, 1, 1) },

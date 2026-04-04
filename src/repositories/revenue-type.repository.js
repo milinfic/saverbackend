@@ -1,9 +1,16 @@
+
+let revenueType = [
+  { id: 1, name: 'Salário', column: 'salario', date: new Date() },
+  { id: 2, name: 'Vendas On Line', column: 'online', date: new Date() },
+  { id: 3, name: 'Trabalho ou Vendas Equipamento', column: 'pessoal', date: new Date() },
+];
+
 const DB = require('../../models/index');
 
 exports.read = async (data, clientId) => {
   try {
     const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
-
+    
     const types = await DB.RevenueType.query(safeClientId)
       .select([
         `revenue_type_${safeClientId}.*`
@@ -62,7 +69,7 @@ exports.create = async (data, clientId) => {
 exports.update = async (id, data, clientId) => {
   try {
     const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
-
+    
     const updated = await DB.RevenueType.query(safeClientId)
       .update(data)
       .where('id', id)
@@ -79,7 +86,7 @@ exports.update = async (id, data, clientId) => {
 exports.delete = async (id, clientId) => {
   try {
     const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
-
+    
     await DB.RevenueType.query(safeClientId)
       .delete()
       .where('id', id);
@@ -90,4 +97,4 @@ exports.delete = async (id, clientId) => {
     console.log('error delete revenue-type-repository: ', error.message);
     return false;
   }
-};
+}

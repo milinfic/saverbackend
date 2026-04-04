@@ -1,4 +1,5 @@
 const revenue = require('../services/revenue.service');
+<<<<<<< HEAD
 
 exports.read = async (req, res) => {
 
@@ -15,11 +16,23 @@ exports.read = async (req, res) => {
     console.error('Error reading revenues:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+const utils = require('../utils/comumnsFunctions');
+
+exports.read = async (req, res) => {
+
+  const clientId = utils.getClientID(req, res);
+
+  const data = await revenue.read(req.body, clientId);
+
+  res.send(data);
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.readById = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
 
+<<<<<<< HEAD
   const clientId = req?.user?.clientId || null;
 
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
@@ -66,11 +79,29 @@ exports.create = async (req, res) => {
     console.error('Error creating revenue:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  const clientId = utils.getClientID(req, res);
+
+  const data = await revenue.readById(id, clientId);
+
+  res.send(data);
+};
+
+exports.create = async (req, res) => {
+  const clientId = utils.getClientID(req);
+
+  if (!clientId) return res.send.json({success: false});
+
+  const data = await revenue.create(req.body, clientId);
+
+  res.send(data);
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.update = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
 
+<<<<<<< HEAD
   const clientId = req?.user?.clientId || null;
 
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
@@ -85,11 +116,19 @@ exports.update = async (req, res) => {
     console.error('Error updating revenue:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  const clientId = utils.getClientID(req, res);
+
+  const data = await revenue.update(id, clientId, req.body);  
+
+  res.send(data);
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params; // pega o ID da URL
+<<<<<<< HEAD
 
     const clientId = req?.user?.clientId || null;
 
@@ -104,6 +143,18 @@ exports.delete = async (req, res) => {
   } catch (error) {
     console.error('Error deleting revenue:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
+=======
+    
+    const clientId = utils.getClientID(req, res);
+
+    // chamar o serviço que deleta do banco
+    await revenue.delete(id, clientId);
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: true });
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
   }
 };
 

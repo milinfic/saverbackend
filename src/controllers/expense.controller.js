@@ -5,6 +5,7 @@ exports.read = async (req, res) => {
 
   const clientId = req?.user?.clientId || null;
   
+<<<<<<< HEAD
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
 
   const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
@@ -16,12 +17,20 @@ exports.read = async (req, res) => {
     console.error('Error reading expenses:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  if (!req.user.clientId) res.send.json({success: false});
+
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+  res.send(await expense.read(req.body, safeClientId));
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.readById = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
   console.log('readById expense...');
 
+<<<<<<< HEAD
   const clientId = req?.user?.clientId || null;
   
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
@@ -38,11 +47,15 @@ exports.readById = async (req, res) => {
     console.error('Error reading expense:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  res.send(await expense.readById(id));
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.create = async (req, res) => {
   console.log('create expense...');
 
+<<<<<<< HEAD
   const clientId = req?.user?.clientId || null;
   
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
@@ -69,12 +82,18 @@ exports.create = async (req, res) => {
     console.error('Error creating expense:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  res.send({
+    data: await expense.create(req.body)
+  });
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.update = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
   console.log('update expense...');
 
+<<<<<<< HEAD
   const clientId = req?.user?.clientId || null;
   
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
@@ -91,6 +110,9 @@ exports.update = async (req, res) => {
     console.error('Error updating expense:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  res.send(await expense.update(id, req.body));
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.delete = async (req, res) => {
@@ -98,6 +120,7 @@ exports.delete = async (req, res) => {
     const { id } = req.params; // pega o ID da URL
     console.log('Deleting expense id:', id);
 
+<<<<<<< HEAD
     const clientId = req?.user?.clientId || null;
     
     if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
@@ -111,6 +134,15 @@ exports.delete = async (req, res) => {
   } catch (error) {
     console.error('Error deleting expense:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
+=======
+    // chamar o serviço que deleta do banco
+    await expense.delete(id);
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: true });
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
   }
 };
 

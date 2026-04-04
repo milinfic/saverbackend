@@ -3,6 +3,7 @@ const expenseType = require('../services/expenseType.service');
 exports.read = async (req, res) => {
   const clientId = req?.user?.clientId || null;
   
+<<<<<<< HEAD
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
 
   const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
@@ -14,12 +15,20 @@ exports.read = async (req, res) => {
     console.error('Error reading expense types:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  if (!req.user.clientId) res.send.json({success: false});
+
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+  
+  res.send(await expenseType.read(req.body, safeClientId));
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.readById = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
   const clientId = req?.user?.clientId || null;
   
+<<<<<<< HEAD
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
 
   const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
@@ -34,11 +43,19 @@ exports.readById = async (req, res) => {
     console.error('Error reading expense type:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  if (!req.user.clientId) res.send.json({success: false});
+
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+  res.send(await expenseType.readById(id, safeClientId));
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.create = async (req, res) => {
   const clientId = req?.user?.clientId || null;
   
+<<<<<<< HEAD
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
 
   const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
@@ -59,12 +76,24 @@ exports.create = async (req, res) => {
     console.error('Error creating expense type:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  if (!req.user.clientId) res.send.json({success: false});
+
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+  const data = await expenseType.create(req.body, safeClientId);
+
+  res.send({
+    data: data
+  });
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.update = async (req, res) => {
   const { id } = req.params; // pega o ID da URL
   const clientId = req?.user?.clientId || null;
   
+<<<<<<< HEAD
   if (!clientId) return res.status(401).json({ success: false, message: 'Client ID not found' });
 
   // Basic validation
@@ -104,6 +133,15 @@ exports.delete = async (req, res) => {
     console.error('Error deleting expense type:', error);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+=======
+  if (!req.user.clientId) res.send.json({success: false});
+
+  const safeClientId = String(clientId).replace(/[^a-zA-Z0-9_]/g, '');
+
+  const data = await expenseType.update(id, req.body, safeClientId);
+
+  res.send(data)
+>>>>>>> d9a729895c87f9c78d2c0cf207a46e16dd89756d
 };
 
 exports.delete = async (req, res) => {
